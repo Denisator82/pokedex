@@ -6,7 +6,7 @@
     <title>Pokedex</title>
     <link rel="stylesheet" href="backgroundColor.css">
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <script src="./pokemon.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -18,22 +18,50 @@
                 </div>
                 <div class="search-wrapper">
                     <div class="search-wrapp">
-                        <img src="./assets/search.png" alt="search icon" class="search-icon"/>
-                        <input type="text" class="search-input body3-fonts" placeholder="Search" id="search-input"/>
-                        <img src="./assets/cross.png" alt="cross icon" class="search-close-icon" id="search-close-icon"/>
+                        <img
+                            src="./assets/search.png"
+                            alt="search icon"
+                            class="search-icon"
+                        />
+                        <input
+                            type="text"
+                            class="search-input body3-fonts"
+                            placeholder="Search"
+                            id="search-input"
+                        />
+                        <img
+                            src="./assets/cross.png"
+                            alt="cross icon"
+                            class="search-close-icon"
+                            id="search-close-icon"/>
                     </div>
                     <div class="sort-wrapper">
                         <div class="sort-wrap">
-                            <img src="./assets/sorting.png" alt="sorting" class="sort-icon" id="sort-icon"/>
+                            <img
+                                src="./assets/sorting.png"
+                                alt="sorting"
+                                class="sort-icon"
+                                id="sort-icon"/>
                         </div>
                         <div class="filter-wrapper">
                             <p class="body2-fonts">Sort by:</p>
                             <div>
-                                <input type="radio" id="number" name="filters" value="number" checked/>
+                                <input
+                                    type="radio"
+                                    id="number"
+                                    name="filters"
+                                    value="number"
+                                    checked
+                                />
                                 <label for="number" class="body3-fonts">Number</label>
                             </div>
                             <div>
-                                <input type="radio" id="name" name="filters" value="name"/>
+                                <input
+                                    type="radio"
+                                    id="name" 
+                                    name="filters" 
+                                    value="name"
+                                />
                                 <label for="name" class="body3-fonts">Name</label>
                             </div>
                         </div>
@@ -41,17 +69,12 @@
                 </div>
             </div>
         </header>
-        <main>
-            <div id="gallery"></div>
-            <div id="lightbox" class="hidden">
-                <span id="close" onclick="closeLightbox()">X</span>
-                <img id="idPicture" src="" alt="Aktuelles Bild">
-                <p>
-                    <input id="idBack" type="button" value="<" onclick="navigatePokemon(-1)">
-                    <input id="idForward" type="button" value=">" onclick="navigatePokemon(1)">
-                </p>
+        <section class="pokemon-list">
+            <div class="container">
+                <div class="list-wrapper"></div>
             </div>
-        </main>
+            <div id="not-found-message">Pokemon not found</div>
+        </section>
         <footer></footer>
     </div>
 </body>
