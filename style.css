@@ -15,7 +15,7 @@ body {
 }
 
 header {
-    height: 250px;
+    height: 200px;
 }
 
 footer {
@@ -27,13 +27,15 @@ main {
     display: flex; /*Hauptseite*/
     flex-direction: column;
     background-color: white;
-    height: calc(100vh - 192px);
+    height: calc(100vh - 300px);
     overflow-y: auto;
 }
 
 h1 {
     padding: 50px;
     margin: 0;
+    font-size: 64px;
+    color: white;
 }
 
 #gallery {
