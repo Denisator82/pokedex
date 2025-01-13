@@ -16,11 +16,11 @@
         <main>
             <div id="gallery"></div>
             <div id="lightbox" class="hidden">
-                <span id="close">X</span>
+                <span id="close" onclick="closeLightbox()">X</span>
                 <img id="idPicture" src="" alt="Aktuelles Bild">
                 <p>
-                    <input id="idBack" type="button" value="<">
-                    <input id="idForward" type="button" value=">">
+                    <input id="idBack" type="button" value="<" onclick="navigatePokemon(-1)">
+                    <input id="idForward" type="button" value=">" onclick="navigatePokemon(1)">
                 </p>
             </div>
         </main>
