@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokémon Galerie</title>
+    <link rel="icon" type="image/x-icon" href="./assets/pokeball.png">
+    <title>Pokédex</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
             <img src="./assets/pokeball.png" alt="Pokémon Logo">
-            <h1>Pokémon Galerie</h1>
+            <h1>Pokédex</h1>
         </header>
-
-        <div id="gallery">
+        
+        <div id="pokemon-gallery">
             <!-- Thumbnails werden hier dynamisch durch JavaScript hinzugefügt -->
         </div>
+        <div id="loadingScreen">
+            <img src="./assets/run.gif" alt="Running Professor">
+        </div> 
 
         <footer>
             <button id="loadMore">Mehr laden</button>
@@ -26,7 +30,7 @@
     <!-- Lightbox für die große Ansicht -->
     <div id="lightbox" class="hidden">
         <div id="overlay" onclick="closeLightbox()"></div>
-        <div id="lightbox-content">
+        <div id="pokemon-card" class="card">
             <span id="close" onclick="closeLightbox()">X</span>
             <img id="idPicture" src="" alt="Aktuelles Bild">
             <div id="pokemon-info">

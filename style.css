@@ -33,7 +33,7 @@ p {
     font-size: 1rem;
 }
 
-#gallery {
+#pokemon-gallery {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 20px;
@@ -74,18 +74,27 @@ p {
     font-style: italic;
 }
 
+
+/* Pokémon-Karte */
+#pokemon-card {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+    z-index: 1001;
+}
+
 #lightbox {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Transparentes Overlay */
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Standardtransparenz */
     z-index: 1000;
-    overflow: hidden; /* Verhindert das Scrollen im Hintergrund */
 }
 
 #lightbox.hidden {
@@ -117,7 +126,6 @@ p {
 }
 
 #idPicture {
-    max-width: 90%;
     max-height: 60%;
     margin-bottom: 20px;
     border-radius: 10px;

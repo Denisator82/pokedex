@@ -4,7 +4,7 @@ let currentOffset = 0; // Offset für die nächste Pokémon-Ladung
 const limit = 20; // Anzahl der Pokémon pro Ladezyklus
 
 // HTML-Elemente
-const gallery = document.getElementById("gallery");
+const pokemonGallery = document.getElementById("pokemon-gallery");
 const lightbox = document.getElementById("lightbox");
 const idPicture = document.getElementById("idPicture");
 const loadMoreButton = document.getElementById("loadMore");
@@ -86,7 +86,7 @@ async function displayGallery(newPokemonList) {
             div.appendChild(thumbnail);
 
             div.setAttribute("onclick", `showLightbox(${pokemonList.length})`);
-            gallery.appendChild(div);
+            pokemonGallery.appendChild(div);
 
             // Pokémon zur Liste hinzufügen
             pokemonList.push(details);
@@ -113,6 +113,11 @@ async function loadMorePokemon() {
 // Event Listener für den "Mehr laden"-Button
 loadMoreButton.addEventListener("click", loadMorePokemon);
 
+// Ladeverzögerung
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Lightbox-Funktionalität
 function showLightbox(index) {
     currentPokemonIndex = index;
@@ -135,14 +140,18 @@ function showLightbox(index) {
     document.getElementById("pokemon-attack").textContent = `Attack: ${pokemon.stats.find(stat => stat.stat.name === "attack")?.base_stat || "N/A"}`;
     document.getElementById("pokemon-defense").textContent = `Defense: ${pokemon.stats.find(stat => stat.stat.name === "defense")?.base_stat || "N/A"}`;
 
-    // Dynamische Hintergrundfarbe basierend auf dem ersten Pokémon-Typ
+    // Dynamische Hintergrundfarbe der Karte basierend auf dem ersten Pokémon-Typ
     const primaryType = pokemon.types[0]?.type.name || "unknown";
     const backgroundColor = typeColors[primaryType] || "#D3D3D3"; // Standardfarbe für unbekannte Typen
-    lightbox.style.backgroundColor = backgroundColor; // Setzt die Hintergrundfarbe der Lightbox
+    document.getElementById("pokemon-card").style.backgroundColor = backgroundColor;
+
+    // Setzt das transparente Overlay
+    lightbox.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Transparentes Overlay
 
     // Zeigt die Lightbox an
     lightbox.classList.remove("hidden");
 }
+
 
 
 // Navigiere zwischen den Pokémon
