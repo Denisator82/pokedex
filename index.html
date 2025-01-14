@@ -1,81 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokedex</title>
-    <link rel="stylesheet" href="backgroundColor.css">
+    <title>Pokémon Galerie</title>
     <link rel="stylesheet" href="style.css">
-    <script src="./pokemon.js" defer></script>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="header-home">
-                <div class="logo-wrapper">
-                    <img src="./assets/pokeball.png" alt="pokeball" />
-                    <h1>Pokedex</h1>
-                </div>
-                <div class="search-wrapper">
-                    <div class="search-wrapp">
-                        <img
-                            src="./assets/search.png"
-                            alt="search icon"
-                            class="search-icon"
-                        />
-                        <input
-                            type="text"
-                            class="search-input body3-fonts"
-                            placeholder="Search"
-                            id="search-input"
-                        />
-                        <img
-                            src="./assets/cross.png"
-                            alt="cross icon"
-                            class="search-close-icon"
-                            id="search-close-icon"/>
-                    </div>
-                    <div class="sort-wrapper">
-                        <div class="sort-wrap">
-                            <img
-                                src="./assets/sorting.png"
-                                alt="sorting"
-                                class="sort-icon"
-                                id="sort-icon"/>
-                        </div>
-                        <div class="filter-wrapper">
-                            <p class="body2-fonts">Sort by:</p>
-                            <div>
-                                <input
-                                    type="radio"
-                                    id="number"
-                                    name="filters"
-                                    value="number"
-                                    checked
-                                />
-                                <label for="number" class="body3-fonts">Number</label>
-                            </div>
-                            <div>
-                                <input
-                                    type="radio"
-                                    id="name" 
-                                    name="filters" 
-                                    value="name"
-                                />
-                                <label for="name" class="body3-fonts">Name</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <img src="./assets/pokeball.png" alt="Pokémon Logo">
+            <h1>Pokémon Galerie</h1>
         </header>
-        <section class="pokemon-list">
-            <div class="container">
-                <div class="list-wrapper"></div>
-            </div>
-            <div id="not-found-message">Pokemon not found</div>
-        </section>
-        <footer></footer>
+
+        <div id="gallery">
+            <!-- Thumbnails werden hier dynamisch durch JavaScript hinzugefügt -->
+        </div>
+
+        <footer>
+            <button id="loadMore">Mehr laden</button>
+            <span id="loading" style="display:none;">Lädt...</span>
+        </footer>
     </div>
+
+    <!-- Lightbox für die große Ansicht -->
+    <div id="lightbox" class="hidden">
+        <div id="overlay" onclick="closeLightbox()"></div>
+        <div id="lightbox-content">
+            <span id="close" onclick="closeLightbox()">X</span>
+            <img id="idPicture" src="" alt="Aktuelles Bild">
+            <div id="pokemon-info">
+                <h2 id="pokemon-name"></h2>
+                <p><strong>ID:</strong> <span id="pokemon-id"></span></p>
+                <p><strong>Types:</strong> <span id="pokemon-types"></span></p>
+                <p><strong>HP:</strong> <span id="pokemon-hp"></span></p>
+                <p><strong>Attack:</strong> <span id="pokemon-attack"></span></p>
+                <p><strong>Defense:</strong> <span id="pokemon-defense"></span></p>
+            </div>
+            <div id="navigation-buttons">
+                <input id="idBack" type="button" value="<" onclick="navigatePokemon(-1)">
+                <input id="idForward" type="button" value=">" onclick="navigatePokemon(1)">
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

@@ -1,129 +1,164 @@
-// document.addEventListener('DOMContentLoaded', () => {
-//     const gallery = document.getElementById('gallery');
-//     const types = ['fire', 'water', 'steel', 'plant', 'poison', 'electro', 'dragon', 'ghost', 'fight', 'bug', 'fairy', 'normal', 'ground', 'fly'];
+// URL für die Pokémon-API
+const baseApiUrl = "https://pokeapi.co/api/v2/pokemon";
+let currentOffset = 0; // Offset für die nächste Pokémon-Ladung
+const limit = 20; // Anzahl der Pokémon pro Ladezyklus
 
-//     types.forEach(type => {
-//         const div = document.createElement('div');
-//         div.classList.add('thumbnail', type);
-//         gallery.appendChild(div);
-//     });
-// });
+// HTML-Elemente
+const gallery = document.getElementById("gallery");
+const lightbox = document.getElementById("lightbox");
+const idPicture = document.getElementById("idPicture");
+const loadMoreButton = document.getElementById("loadMore");
+const loadingIndicator = document.getElementById("loading");
+
+// Typenfarben
+const typeColors = {
+    fire: "#FF7043",
+    water: "#42A5F5",
+    steel: "#B0BEC5",
+    grass: "#66BB6A",
+    poison: "#AB47BC",
+    electric: "#FFEB3B",
+    dragon: "#7E57C2",
+    ghost: "#757575",
+    fighting: "#EF5350",
+    bug: "#8BC34A",
+    fairy: "#F48FB1",
+    normal: "#A1887F",
+    ground: "#D4A190",
+    flying: "#81D4FA"
+};
+
+// Pokémon-Liste
+let pokemonList = [];
+let currentPokemonIndex = 0;
+
+// Pokémon-Liste laden
+async function fetchPokemons(offset, limit) {
+    try {
+        const apiUrl = `${baseApiUrl}?limit=${limit}&offset=${offset}`;
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error(`HTTP-Error: ${response.status}`);
+        const data = await response.json();
+        return data.results;
+    } catch (error) {
+        console.error("Fehler beim Abrufen der Pokémon-Liste:", error);
+        return [];
+    }
+}
+
+// Galerie füllen
+async function displayGallery(newPokemonList) {
+    for (const pokemon of newPokemonList) {
+        try {
+            const response = await fetch(pokemon.url);
+            if (!response.ok) throw new Error(`HTTP-Error: ${response.status}`);
+            const details = await response.json();
+
+            // Pokémon-Element erstellen
+            const div = document.createElement("div");
+            div.classList.add("thumbnail");
+
+            // Typ und Hintergrundfarbe
+            const primaryType = details.types[0]?.type.name || "unknown";
+            const secondaryType = details.types[1]?.type.name || null;
+            const backgroundColor = typeColors[primaryType] || "#D3D3D3";
+            div.style.backgroundColor = backgroundColor;
+
+            // ID und weitere Infos
+            const pokemonId = document.createElement("p");
+            pokemonId.textContent = `ID: ${details.id}`;
+            pokemonId.classList.add("pokemon-id");
+
+            const name = document.createElement("h3");
+            name.textContent = details.name;
+
+            const types = document.createElement("p");
+            types.textContent = `Type(s): ${primaryType}${secondaryType ? `, ${secondaryType}` : ""}`;
+            types.classList.add("pokemon-types");
+
+            const thumbnail = document.createElement("img");
+            thumbnail.src = details.sprites.front_default || "placeholder.png";
+            thumbnail.alt = details.name;
+
+            div.appendChild(pokemonId);
+            div.appendChild(name);
+            div.appendChild(types);
+            div.appendChild(thumbnail);
+
+            div.setAttribute("onclick", `showLightbox(${pokemonList.length})`);
+            gallery.appendChild(div);
+
+            // Pokémon zur Liste hinzufügen
+            pokemonList.push(details);
+        } catch (error) {
+            console.error(`Fehler beim Abrufen von ${pokemon.name}:`, error);
+        }
+    }
+}
+
+// Button zum Laden weiterer Pokémon
+async function loadMorePokemon() {
+    loadMoreButton.disabled = true;
+    loadingIndicator.classList.remove("hidden");
+
+    const newPokemonList = await fetchPokemons(currentOffset, limit);
+    await displayGallery(newPokemonList);
+
+    currentOffset += limit;
+
+    loadMoreButton.disabled = false;
+    loadingIndicator.classList.add("hidden");
+}
+
+// Event Listener für den "Mehr laden"-Button
+loadMoreButton.addEventListener("click", loadMorePokemon);
+
+// Lightbox-Funktionalität
+function showLightbox(index) {
+    currentPokemonIndex = index;
+    const pokemon = pokemonList[index];
+
+    // Setzt das Bild des Pokémon
+    idPicture.src = pokemon.sprites.other["official-artwork"].front_default || pokemon.sprites.front_default;
+    idPicture.alt = pokemon.name;
+
+    // Setzt den Pokémon-Namen und ID
+    document.getElementById("pokemon-name").textContent = pokemon.name;
+    document.getElementById("pokemon-id").textContent = `ID: ${pokemon.id}`;
+
+    // Setzt die Pokémon-Typen
+    const types = pokemon.types.map(type => type.type.name).join(", ");
+    document.getElementById("pokemon-types").textContent = `Type(s): ${types}`;
+
+    // Setzt die Pokémon-Werte (HP, Angriff, Verteidigung)
+    document.getElementById("pokemon-hp").textContent = `HP: ${pokemon.stats.find(stat => stat.stat.name === "hp")?.base_stat || "N/A"}`;
+    document.getElementById("pokemon-attack").textContent = `Attack: ${pokemon.stats.find(stat => stat.stat.name === "attack")?.base_stat || "N/A"}`;
+    document.getElementById("pokemon-defense").textContent = `Defense: ${pokemon.stats.find(stat => stat.stat.name === "defense")?.base_stat || "N/A"}`;
+
+    // Dynamische Hintergrundfarbe basierend auf dem ersten Pokémon-Typ
+    const primaryType = pokemon.types[0]?.type.name || "unknown";
+    const backgroundColor = typeColors[primaryType] || "#D3D3D3"; // Standardfarbe für unbekannte Typen
+    lightbox.style.backgroundColor = backgroundColor; // Setzt die Hintergrundfarbe der Lightbox
+
+    // Zeigt die Lightbox an
+    lightbox.classList.remove("hidden");
+}
 
 
-// // URL für die Pokémon-API
-// const apiUrl = "https://pokeapi.co/api/v2/pokemon?limit=40&offset=0";
+// Navigiere zwischen den Pokémon
+function navigatePokemon(direction) {
+    currentPokemonIndex = (currentPokemonIndex + direction + pokemonList.length) % pokemonList.length;
+    showLightbox(currentPokemonIndex);
+}
 
-// // HTML-Elemente
-// const gallery = document.getElementById("gallery");
-// const lightbox = document.getElementById("lightbox");
-// const idPicture = document.getElementById("idPicture");
-// const close = document.getElementById("close");
+// Schließe die Lightbox
+function closeLightbox() {
+    lightbox.classList.add("hidden");
+}
 
-// // Liste der Pokémon
-// let pokemonList = [];
-// let currentPokemonIndex = 0; // Index des aktuell angezeigten Pokémon
-
-// // Typenfarben
-// const typeColors = {
-//     fire: "#FF7043",
-//     water: "#42A5F5",
-//     steel: "#B0BEC5",
-//     grass: "#66BB6A",
-//     poison: "#AB47BC",
-//     electric: "#FFEB3B",
-//     dragon: "#7E57C2",
-//     ghost: "#757575",
-//     fighting: "#EF5350",
-//     bug: "#8BC34A",
-//     fairy: "#F48FB1",
-//     normal: "#A1887F",
-//     ground: "#D4A190",
-//     flying: "#81D4FA"
-// };
-
-// // Funktion, um Pokémon-Liste von der API zu laden
-// async function fetchPokemons() {
-//     try {
-//         const response = await fetch(apiUrl);
-//         if (!response.ok) throw new Error(`HTTP-Error: ${response.status}`);
-//         const data = await response.json();
-//         pokemonList = data.results;
-//         displayGallery(pokemonList);
-//     } catch (error) {
-//         console.error("Fehler beim Abrufen der Pokémon-Liste:", error);
-//     }
-// }
-
-// // Funktion, um die Galerie mit Pokémon-Bildern und Typen zu füllen
-// async function displayGallery(pokemonList) {
-//     for (let i = 0; i < pokemonList.length; i++) {
-//         const pokemon = pokemonList[i];
-//         const response = await fetch(pokemon.url);
-//         const details = await response.json();
-
-//         // Pokémon-Element erstellen
-//         const div = document.createElement("div");
-//         div.classList.add("thumbnail");
-
-//         // Typ des Pokémon bestimmen
-//         const primaryType = details.types[0].type.name;
-//         const backgroundColor = typeColors[primaryType] || "#D3D3D3"; // Standardfarbe für unbekannte Typen
-//         div.style.backgroundColor = backgroundColor;
-
-//         // Bild hinzufügen
-//         const thumbnail = document.createElement("img");
-//         thumbnail.src = details.sprites.front_default;
-//         thumbnail.alt = details.name;
-
-//         // Namen hinzufügen
-//         const name = document.createElement("p");
-//         name.textContent = details.name;
-
-//         // Aufbau des Pokémon-Elements
-//         div.appendChild(thumbnail);
-//         div.appendChild(name);
-
-//         // Klicken, um Lightbox zu öffnen
-//         div.setAttribute("onclick", `showLightbox(${i})`);
-//         gallery.appendChild(div);
-//     }
-// }
-
-// // Funktion, um das angeklickte Pokémon in der Lightbox anzuzeigen
-// function showLightbox(index) {
-//     currentPokemonIndex = index; // Speichern des aktuellen Index
-//     const pokemon = pokemonList[index];
-//     fetch(pokemon.url)
-//         .then((response) => response.json())
-//         .then((details) => {
-//             idPicture.src = details.sprites.other["official-artwork"].front_default || details.sprites.front_default;
-//             idPicture.alt = pokemon.name;
-//             lightbox.classList.remove("hidden");
-//         });
-// }
-
-// // Funktion, um die Navigation in der Lightbox zu ermöglichen
-// function navigatePokemon(direction) {
-//     currentPokemonIndex += direction;
-
-//     // Sicherstellen, dass der Index im gültigen Bereich bleibt
-//     if (currentPokemonIndex < 0) {
-//         currentPokemonIndex = pokemonList.length - 1; // Zum letzten Pokémon springen
-//     } else if (currentPokemonIndex >= pokemonList.length) {
-//         currentPokemonIndex = 0; // Zum ersten Pokémon springen
-//     }
-
-//     // Lightbox mit neuem Pokémon aktualisieren
-//     showLightbox(currentPokemonIndex);
-// }
-
-// // Funktion, um die Lightbox zu schließen
-// function closeLightbox() {
-//     lightbox.classList.add("hidden");
-// }
-
-// // Initial Pokémon laden
-// document.addEventListener("DOMContentLoaded", () => {
-//     fetchPokemons();
-// });
-
+// Erste Pokémon laden
+document.addEventListener("DOMContentLoaded", async () => {
+    const initialPokemonList = await fetchPokemons(currentOffset, limit);
+    await displayGallery(initialPokemonList);
+    currentOffset += limit;
+});
