@@ -1,173 +1,121 @@
 // URL für die Pokémon-API
 const baseApiUrl = "https://pokeapi.co/api/v2/pokemon";
-let currentOffset = 0; // Offset für die nächste Pokémon-Ladung
-const limit = 20; // Anzahl der Pokémon pro Ladezyklus
+let currentOffset = 0;
+const limit = 20;
 
-// HTML-Elemente
 const pokemonGallery = document.getElementById("pokemon-gallery");
 const lightbox = document.getElementById("lightbox");
-const idPicture = document.getElementById("idPicture");
 const loadMoreButton = document.getElementById("loadMore");
-const loadingIndicator = document.getElementById("loading");
+const loadingScreen = document.getElementById("loadingScreen");
 
-// Typenfarben
-const typeColors = {
-    fire: "#FF7043",
-    water: "#42A5F5",
-    steel: "#B0BEC5",
-    grass: "#66BB6A",
-    poison: "#AB47BC",
-    electric: "#FFEB3B",
-    dragon: "#7E57C2",
-    ghost: "#757575",
-    fighting: "#EF5350",
-    bug: "#8BC34A",
-    fairy: "#F48FB1",
-    normal: "#A1887F",
-    ground: "#D4A190",
-    flying: "#81D4FA"
+let pokemonList = [];
+
+// Verzögerung mit Lade-Gif
+const delay = async (ms) => {
+    loadingScreen.style.display = "flex";
+    await new Promise((resolve) => setTimeout(resolve, ms));
+    loadingScreen.style.display = "none";
 };
 
-// Pokémon-Liste
-let pokemonList = [];
-let currentPokemonIndex = 0;
+// API-Aufruf für Pokémon-Daten
+const fetchPokemons = async (offset, limit) => {
+    const response = await fetch(`${baseApiUrl}?limit=${limit}&offset=${offset}`);
+    if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+    const data = await response.json();
+    return data.results;
+};
 
-// Pokémon-Liste laden
-async function fetchPokemons(offset, limit) {
-    try {
-        const apiUrl = `${baseApiUrl}?limit=${limit}&offset=${offset}`;
-        const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error(`HTTP-Error: ${response.status}`);
-        const data = await response.json();
-        return data.results;
-    } catch (error) {
-        console.error("Fehler beim Abrufen der Pokémon-Liste:", error);
-        return [];
-    }
-}
+// Pokémon-Details abrufen
+const fetchPokemonDetails = async (pokemon) => {
+    const response = await fetch(pokemon.url);
+    if (!response.ok) throw new Error(`Fehler bei ${pokemon.name}`);
+    return await response.json();
+};
 
-// Galerie füllen
-async function displayGallery(newPokemonList) {
-    for (const pokemon of newPokemonList) {
-        try {
-            const response = await fetch(pokemon.url);
-            if (!response.ok) throw new Error(`HTTP-Error: ${response.status}`);
-            const details = await response.json();
+// Farben für Pokémon-Typen definieren
+const typeColors = {
+    grass: "#78C850",
+    fire: "#F08030",
+    water: "#6890F0",
+    bug: "#A8B820",
+    normal: "#A8A878",
+    poison: "#A040A0",
+    electric: "#F8D030",
+    ground: "#E0C068",
+    fairy: "#EE99AC",
+    fighting: "#C03028",
+    psychic: "#F85888",
+    rock: "#B8A038",
+    ghost: "#705898",
+    ice: "#98D8D8",
+    dragon: "#7038F8",
+    dark: "#705848",
+    steel: "#B8B8D0",
+    flying: "#A890F0"
+};
 
-            // Pokémon-Element erstellen
-            const div = document.createElement("div");
-            div.classList.add("thumbnail");
+// Pokémon anzeigen
+const displayGallery = async (newPokemonList) => {
+    const detailsList = await Promise.all(newPokemonList.map(fetchPokemonDetails));
 
-            // Typ und Hintergrundfarbe
-            const primaryType = details.types[0]?.type.name || "unknown";
-            const secondaryType = details.types[1]?.type.name || null;
-            const backgroundColor = typeColors[primaryType] || "#D3D3D3";
-            div.style.backgroundColor = backgroundColor;
+    detailsList.forEach((details) => {
+        const types = details.types.map((t) => t.type.name).join(", ");
+        const bgColor = typeColors[details.types[0]?.type.name] || "#D3D3D3";
+        const thumbnailHTML = templates.pokemonThumbnail(
+            details.id,
+            details.name,
+            types,
+            details.sprites.front_default,
+            bgColor
+        );
+        pokemonGallery.insertAdjacentHTML("beforeend", thumbnailHTML);
+        pokemonList.push(details);
+    });
+};
 
-            // ID und weitere Infos
-            const pokemonId = document.createElement("p");
-            pokemonId.textContent = `ID: ${details.id}`;
-            pokemonId.classList.add("pokemon-id");
+// Lightbox anzeigen
+const showLightbox = (index) => {
+    const pokemon = pokemonList[index];
+    const types = pokemon.types.map((t) => t.type.name).join(", ");
+    const bgColor = typeColors[pokemon.types[0]?.type.name] || "#D3D3D3";
+    const stats = {
+        hp: pokemon.stats.find((s) => s.stat.name === "hp")?.base_stat || "N/A",
+        attack: pokemon.stats.find((s) => s.stat.name === "attack")?.base_stat || "N/A",
+        defense: pokemon.stats.find((s) => s.stat.name === "defense")?.base_stat || "N/A"
+    };
+    const lightboxHTML = templates.lightboxContent(
+        pokemon.id,
+        pokemon.name,
+        types,
+        stats,
+        pokemon.sprites.other["official-artwork"].front_default || pokemon.sprites.front_default,
+        bgColor
+    );
+    lightbox.innerHTML = lightboxHTML;
+    lightbox.classList.remove("hidden");
+};
 
-            const name = document.createElement("h3");
-            name.textContent = details.name;
-
-            const types = document.createElement("p");
-            types.textContent = `Type(s): ${primaryType}${secondaryType ? `, ${secondaryType}` : ""}`;
-            types.classList.add("pokemon-types");
-
-            const thumbnail = document.createElement("img");
-            thumbnail.src = details.sprites.front_default || "placeholder.png";
-            thumbnail.alt = details.name;
-
-            div.appendChild(pokemonId);
-            div.appendChild(name);
-            div.appendChild(types);
-            div.appendChild(thumbnail);
-
-            div.setAttribute("onclick", `showLightbox(${pokemonList.length})`);
-            pokemonGallery.appendChild(div);
-
-            // Pokémon zur Liste hinzufügen
-            pokemonList.push(details);
-        } catch (error) {
-            console.error(`Fehler beim Abrufen von ${pokemon.name}:`, error);
-        }
-    }
-}
-
-// Button zum Laden weiterer Pokémon
-async function loadMorePokemon() {
+// Pokémon laden mit Delay
+const loadMorePokemon = async () => {
     loadMoreButton.disabled = true;
-    loadingIndicator.classList.remove("hidden");
+    await delay(3000);
 
     const newPokemonList = await fetchPokemons(currentOffset, limit);
     await displayGallery(newPokemonList);
 
     currentOffset += limit;
-
     loadMoreButton.disabled = false;
-    loadingIndicator.classList.add("hidden");
-}
+};
 
-// Event Listener für den "Mehr laden"-Button
+// Lightbox schließen
+const closeLightbox = () => {
+    lightbox.classList.add("hidden");
+};
+
+// Event Listener für "Mehr laden"
 loadMoreButton.addEventListener("click", loadMorePokemon);
 
-// Ladeverzögerung
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// Lightbox-Funktionalität
-function showLightbox(index) {
-    currentPokemonIndex = index;
-    const pokemon = pokemonList[index];
-
-    // Setzt das Bild des Pokémon
-    idPicture.src = pokemon.sprites.other["official-artwork"].front_default || pokemon.sprites.front_default;
-    idPicture.alt = pokemon.name;
-
-    // Setzt den Pokémon-Namen und ID
-    document.getElementById("pokemon-name").textContent = pokemon.name;
-    document.getElementById("pokemon-id").textContent = `ID: ${pokemon.id}`;
-
-    // Setzt die Pokémon-Typen
-    const types = pokemon.types.map(type => type.type.name).join(", ");
-    document.getElementById("pokemon-types").textContent = `Type(s): ${types}`;
-
-    // Setzt die Pokémon-Werte (HP, Angriff, Verteidigung)
-    document.getElementById("pokemon-hp").textContent = `HP: ${pokemon.stats.find(stat => stat.stat.name === "hp")?.base_stat || "N/A"}`;
-    document.getElementById("pokemon-attack").textContent = `Attack: ${pokemon.stats.find(stat => stat.stat.name === "attack")?.base_stat || "N/A"}`;
-    document.getElementById("pokemon-defense").textContent = `Defense: ${pokemon.stats.find(stat => stat.stat.name === "defense")?.base_stat || "N/A"}`;
-
-    // Dynamische Hintergrundfarbe der Karte basierend auf dem ersten Pokémon-Typ
-    const primaryType = pokemon.types[0]?.type.name || "unknown";
-    const backgroundColor = typeColors[primaryType] || "#D3D3D3"; // Standardfarbe für unbekannte Typen
-    document.getElementById("pokemon-card").style.backgroundColor = backgroundColor;
-
-    // Setzt das transparente Overlay
-    lightbox.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Transparentes Overlay
-
-    // Zeigt die Lightbox an
-    lightbox.classList.remove("hidden");
-}
-
-
-
-// Navigiere zwischen den Pokémon
-function navigatePokemon(direction) {
-    currentPokemonIndex = (currentPokemonIndex + direction + pokemonList.length) % pokemonList.length;
-    showLightbox(currentPokemonIndex);
-}
-
-// Schließe die Lightbox
-function closeLightbox() {
-    lightbox.classList.add("hidden");
-}
-
-// Erste Pokémon laden
+// Initiales Laden
 document.addEventListener("DOMContentLoaded", async () => {
-    const initialPokemonList = await fetchPokemons(currentOffset, limit);
-    await displayGallery(initialPokemonList);
-    currentOffset += limit;
+    await loadMorePokemon();
 });
