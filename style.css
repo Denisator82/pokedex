@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #FF0000;
+    background-color: whitesmoke;
     color: #F5F5F5;
 }
 
@@ -12,6 +12,7 @@ body {
     background-color: whitesmoke;
     min-height: 100vh;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    flex: 1;
 }
 
 /* Header */
@@ -35,20 +36,22 @@ header img {
 main {
     padding: 20px;
     border-radius: 10px;
+    /*height: calc(100vh - 200px - 200px);*/
 }
 
 footer {
-    width: 100%;
-    position: fixed;
     bottom: 0;
-    left: 0;
     width: 100%;
     background-color: #FF0000;
-    padding: 20px 0px;
+    padding: 20px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
     text-align: center;
 }
 
 .footer-container {
+    max-width: 1920px;
+    margin: 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -98,7 +101,6 @@ h3 {
     height: 250px;
     margin:0px;
     object-fit: contain;
-    margin-bottom: 10px;
 }
 
 #loadingScreen {
