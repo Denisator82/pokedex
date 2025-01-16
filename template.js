@@ -2,7 +2,7 @@ const templates = {
     pokemonThumbnail: (id, name, types, image, bgColor) => `
         <div class="thumbnail" style="background-color: ${bgColor}" onclick="showLightbox(${id})">
             <p class="pokemon-id">ID: ${id}</p>
-            <h3>${name}</h3>
+            <h3>${name.toUpperCase()}</h3>
             <img src="${image}" alt="${name}">
             <p class="pokemon-types">Type(s): ${types}</p>
         </div>
@@ -13,7 +13,7 @@ const templates = {
             <span id="close" onclick="closeLightbox()">X</span>
             <img id="idPicture" src="${image}" alt="${name}">
             <div id="pokemonInfo">
-                <h2 id="pokemonName">${name}</h2>
+                <h2 id="pokemonName">${name.toUpperCase()}</h2>
                 <p><strong>ID:</strong> ${id}</p>
                 <p><strong>Types:</strong> ${types}</p>
                 <p><strong>HP:</strong> ${stats.hp}</p>

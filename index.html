@@ -17,7 +17,6 @@
             <div class="search-wrap">
                 <img src="./assets/search.png" alt="search icon"class="search-icon"/>
                 <input type="text" class="search-input" placeholder="Search" id="searchInput"/>
-                <img src="./assets/cross.png" alt="cross icon" class="search-close-icon" id="searchCloseIcon"/>
             </div>
         </header>
         <main>
@@ -25,11 +24,10 @@
             <div id="loadingScreen">
                 <img src="./assets/run.gif" alt="Loading...">
             </div>
+            <div id="notFoundMessage">Pokemon not found</div>
         </main>
         <footer>
-            <div class="footer-container">
-                <button id="loadMore">Load More Pokémon</button>
-            </div>
+            <button class="load-more" id="loadMore">Load More Pokémon</button>
         </footer>
     </div>
     <div id="lightbox" class="hidden"></div>

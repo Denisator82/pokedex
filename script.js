@@ -7,6 +7,7 @@ const pokemonGallery = document.getElementById("pokemonGallery");
 const lightbox = document.getElementById("lightbox");
 const loadMoreButton = document.getElementById("loadMore");
 const loadingScreen = document.getElementById("loadingScreen");
+const notFoundMessage = document.querySelector("#not-found-message");
 
 let pokemonList = [];
 
