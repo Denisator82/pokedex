@@ -162,3 +162,67 @@ const updateGallery = (filteredList) => {
         loadMoreButton.disabled = false;
     }
 };
+
+// let currentCardIndex = -1; // Startindex für die Karte (wird erst gesetzt, wenn eine Karte geöffnet wird)
+
+// // Funktion für "Zurück"-Button
+// function prevCard() {
+//     if (currentCardIndex > 0) {
+//         currentCardIndex--; // Einen Schritt zurück
+//         updateLightboxContent(currentCardIndex); // Inhalte aktualisieren
+//     }
+// }
+
+// // Funktion für "Weiter"-Button
+// function nextCard() {
+//     if (currentCardIndex < pokemonList.length - 1) {
+//         currentCardIndex++; // Einen Schritt vor
+//         updateLightboxContent(currentCardIndex); // Inhalte aktualisieren
+//     }
+// }
+
+// // Aktualisiert die Inhalte der Lightbox basierend auf dem aktuellen Index
+// function updateLightboxContent(index) {
+//     if (index < 0 || index >= pokemonList.length) return; // Überprüfe, ob der Index gültig ist
+
+//     const pokemon = pokemonList[index]; // Hole das Pokémon basierend auf dem Index
+//     const types = pokemon.types.map((t) => t.type.name).join(", ");
+//     const bgColor = typeColors[pokemon.types[0]?.type.name] || "#D3D3D3";
+//     const stats = {
+//         hp: pokemon.stats.find((s) => s.stat.name === "hp")?.base_stat || "N/A",
+//         attack: pokemon.stats.find((s) => s.stat.name === "attack")?.base_stat || "N/A",
+//         defense: pokemon.stats.find((s) => s.stat.name === "defense")?.base_stat || "N/A"
+//     };
+
+//     // Ersetze den Inhalt der Lightbox mit aktualisierten Daten
+//     lightbox.innerHTML = templates.lightboxContent(
+//         pokemon.id,
+//         pokemon.name,
+//         types,
+//         stats,
+//         pokemon.sprites.other["official-artwork"].front_default || pokemon.sprites.front_default,
+//         bgColor
+//     );
+
+//     // Sicherstellen, dass die Buttons die neuen Funktionen verwenden
+//     document.querySelector(".prev").onclick = prevCard;
+//     document.querySelector(".next").onclick = nextCard;
+// }
+
+// // Lightbox schließen
+// function closeLightbox() {
+//     lightbox.classList.add("hidden");
+//     // currentCardIndex bleibt unverändert, damit beim Öffnen einer neuen Karte der Index korrekt bleibt
+// }
+
+// // Wenn eine Karte angeklickt wird, öffne die Lightbox und setze den aktuellen Index
+// function openCard(index) {
+//     currentCardIndex = index; // Setze den aktuellen Index auf die angeklickte Karte
+//     updateLightboxContent(currentCardIndex); // Zeige die entsprechende Karte in der Lightbox an
+//     lightbox.classList.remove("hidden"); // Zeige die Lightbox an
+// }
+
+// // Beispiel: Event Listener für das Klicken auf eine Karte
+// document.querySelectorAll('.thumbnail').forEach((card, index) => {
+//     card.addEventListener('click', () => openCard(index));
+// });

@@ -19,7 +19,15 @@ const templates = {
                     <p><strong>Types:</strong> ${types}</p></br>
                     <p><strong>HP:</strong> ${stats.hp}</p>
                     <p><strong>Attack:</strong> ${stats.attack}</p>
-                    <p><strong>Defense:</strong> ${stats.defense}</p>
+                    <p><strong>Defense:</strong> ${stats.defense}</p> 
+                </div>
+                <div class="skip">
+                    <button class="card-nav prev" onclick="prevCard()">
+                    <img src="./assets/chevron_left.png" alt="Zurück" />
+                    </button>
+                    <button class="card-nav next" onclick="nextCard()">
+                    <img src="./assets/chevron_right.png" alt="Weiter" />
+                    </button>
                 </div>
             </div>
         </div>

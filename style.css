@@ -8,10 +8,10 @@ body {
 }
 
 .container {
+    height: auto;
     max-width: 1920px;
     margin: 0 auto;
     background-color: whitesmoke;
-    
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -136,15 +136,17 @@ h3 {
     flex-direction: column;
     align-items: center;
     padding: 10px;
-    border-radius: 10px;
     background-color: #ddd;
     text-align: center;
     color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: 2px solid #000;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .thumbnail:hover {
+    border-color: #FFD700;
     transform: scale(1.05);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
@@ -172,11 +174,12 @@ h3 {
 }
 
 .card {
-    height: 750px;
+    height: 700px;
     width: 500px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    scroll-behavior: smooth; /* Für sanftes Scrollen */
 }
 
 .pokemon-big-picture{
@@ -196,8 +199,13 @@ h2{
     color: black;
     padding: 5px;
     width: 80%;
-    margin-top: 15px;
+    margin: 25px 0;
     border-radius: 10px;
+}
+
+.card-nav img{
+    width: 25px;
+    height: 25px;
 }
 
 
