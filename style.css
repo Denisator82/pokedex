@@ -124,9 +124,14 @@ h3 {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
     color: whitesmoke;
+    
 }
 
+/*Pokemon Karte Hintergrund*/
 .thumbnail {
+    height: 280px;
+    width: 200px;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -144,6 +149,7 @@ h3 {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+/*Pokemon Karte Bild*/
 .thumbnail img {
     width: 200px;
     height: 200px;
@@ -151,6 +157,49 @@ h3 {
     object-fit: contain;
     cursor: pointer;
 }
+
+/*Pokemon Karte Groß Hintergrund*/
+.card-total {
+    border-radius: 10px;
+    border: 5px solid #DBD7D2;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+}
+
+#close {
+    padding: 10px;
+}
+
+.card {
+    height: 750px;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pokemon-big-picture{
+    width: 400px;
+    height: 400px;
+    margin:0px;
+    border: 5px solid #DBD7D2;
+    border-radius: 5px;
+}
+
+h2{
+    margin: 0;
+}
+
+.pokemon-info-chart {
+    background-color: white;
+    color: black;
+    padding: 5px;
+    width: 80%;
+    margin-top: 15px;
+    border-radius: 10px;
+}
+
 
 #loadingScreen {
     display: none;

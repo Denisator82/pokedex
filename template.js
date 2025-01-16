@@ -9,16 +9,18 @@ const templates = {
     `,
     lightboxContent: (id, name, types, stats, image, bgColor) => `
             
-        <div id="pokemonCard" class="card" style="background-color: ${bgColor}">
-            <span id="close" onclick="closeLightbox()">X</span>
-            <img id="idPicture" src="${image}" alt="${name}">
-            <div id="pokemonInfo">
-                <h2 id="pokemonName">${name.toUpperCase()}</h2>
-                <p><strong>ID:</strong> ${id}</p>
-                <p><strong>Types:</strong> ${types}</p>
-                <p><strong>HP:</strong> ${stats.hp}</p>
-                <p><strong>Attack:</strong> ${stats.attack}</p>
-                <p><strong>Defense:</strong> ${stats.defense}</p>
+        <div id="pokemonCard" class="card-total" style="background-color: ${bgColor}">
+            <img src="./assets/cross.png" id="close" onclick="closeLightbox()">
+            <div class="card">
+                <img class="pokemon-big-picture" id="idPicture" src="${image}" alt="${name}">
+                <div class="pokemon-info-chart" id="pokemonInfo">
+                    <h2 id="pokemonName">${name.toUpperCase()}</h2>
+                    <p><strong>ID:</strong> ${id}</p>
+                    <p><strong>Types:</strong> ${types}</p></br>
+                    <p><strong>HP:</strong> ${stats.hp}</p>
+                    <p><strong>Attack:</strong> ${stats.attack}</p>
+                    <p><strong>Defense:</strong> ${stats.defense}</p>
+                </div>
             </div>
         </div>
     `
