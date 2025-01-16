@@ -3,7 +3,7 @@ const baseApiUrl = "https://pokeapi.co/api/v2/pokemon";
 let currentOffset = 0;
 const limit = 20;
 
-const pokemonGallery = document.getElementById("pokemon-gallery");
+const pokemonGallery = document.getElementById("pokemonGallery");
 const lightbox = document.getElementById("lightbox");
 const loadMoreButton = document.getElementById("loadMore");
 const loadingScreen = document.getElementById("loadingScreen");

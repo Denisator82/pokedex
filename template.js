@@ -9,11 +9,11 @@ const templates = {
     `,
     lightboxContent: (id, name, types, stats, image, bgColor) => `
             
-        <div id="pokemon-card" class="card" style="background-color: ${bgColor}">
+        <div id="pokemonCard" class="card" style="background-color: ${bgColor}">
             <span id="close" onclick="closeLightbox()">X</span>
             <img id="idPicture" src="${image}" alt="${name}">
-            <div id="pokemon-info">
-                <h2 id="pokemon-name">${name}</h2>
+            <div id="pokemonInfo">
+                <h2 id="pokemonName">${name}</h2>
                 <p><strong>ID:</strong> ${id}</p>
                 <p><strong>Types:</strong> ${types}</p>
                 <p><strong>HP:</strong> ${stats.hp}</p>

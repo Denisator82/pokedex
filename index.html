@@ -10,11 +10,18 @@
 <body>
     <div class="container">
         <header>
-            <img src="./assets/pokeball.png" alt="Pokémon Logo">
-            <h1>Pokédex</h1>
+            <div class="header-logo">
+                <img src="./assets/pokeball.png" alt="Pokémon Logo">
+                <h1>Pokédex</h1>
+            </div>
+            <div class="search-wrap">
+                <img src="./assets/search.png" alt="search icon"class="search-icon"/>
+                <input type="text" class="search-input body3-fonts" placeholder="Search" id="searchInput"/>
+                <img src="./assets/cross.png" alt="cross icon" class="search-close-icon" id="searchCloseIcon"/>
+            </div>
         </header>
         <main>
-            <section id="pokemon-gallery" class="gallery"></section>
+            <section id="pokemonGallery" class="gallery"></section>
             <div id="loadingScreen">
                 <img src="./assets/run.gif" alt="Loading...">
             </div>
@@ -25,10 +32,7 @@
             </div>
         </footer>
     </div>
-        
-        <!-- Lightbox für Details -->
-        <div id="lightbox" class="hidden"></div>
-        <!-- Skripte -->
+    <div id="lightbox" class="hidden"></div>
         <script src="template.js"></script>
         <script src="script.js"></script>
 </body>
