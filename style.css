@@ -21,7 +21,6 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 0px;
     background-color: #FF0000;
     color: whitesmoke;
 }
@@ -76,11 +75,6 @@ header img {
     width: 20px;
 }
 
-
-.search-close-icon-visible {
-    display: block;
-}
-
 input {
     font-size: 18px;
 }
@@ -91,13 +85,11 @@ main {
 }
 
 footer {
-    width: 100%;
+    width: 1920px;
     height: 96px;
-    /*position: fixed;*/
+    position: fixed;
     bottom: 0;
-    left: 0;
     background-color: #FF0000;
-    padding: 20px 0px;
     text-align: center;
 }
 
@@ -148,8 +140,8 @@ h3 {
 }
 
 .thumbnail img {
-    width: 250px;
-    height: 250px;
+    width: 200px;
+    height: 200px;
     margin:0px;
     object-fit: contain;
 }

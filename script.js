@@ -75,7 +75,7 @@ const displayGallery = async (newPokemonList) => {
 
 // Lightbox anzeigen
 const showLightbox = (index) => {
-    const pokemon = pokemonList[index];
+    const pokemon = pokemonList[index-1];
     const types = pokemon.types.map((t) => t.type.name).join(", ");
     const bgColor = typeColors[pokemon.types[0]?.type.name] || "#D3D3D3";
     const stats = {
@@ -97,14 +97,14 @@ const showLightbox = (index) => {
 
 // Pokémon laden mit Delay
 const loadMorePokemon = async () => {
-    loadMoreButton.disabled = true;
+    loadMoreButton.disabled = true;  // Deaktiviere den Button während des Ladevorgangs
     await delay(3000);
 
     const newPokemonList = await fetchPokemons(currentOffset, limit);
     await displayGallery(newPokemonList);
 
     currentOffset += limit;
-    loadMoreButton.disabled = false;
+    loadMoreButton.disabled = false;  // Aktiviere den Button nach dem Laden
 };
 
 // Lightbox schließen
@@ -119,3 +119,45 @@ loadMoreButton.addEventListener("click", loadMorePokemon);
 document.addEventListener("DOMContentLoaded", async () => {
     await loadMorePokemon();
 });
+
+// Suche im Suchfeld
+const searchInput = document.getElementById("searchInput");
+
+searchInput.addEventListener("input", async () => {
+    const query = searchInput.value.trim().toLowerCase();
+
+    // Deaktiviere den "Lade mehr"-Button während der Suche
+    loadMoreButton.disabled = true;
+
+    if (query.length >= 3) {
+        const filteredPokemons = pokemonList.filter((pokemon) =>
+            pokemon.name.toLowerCase().includes(query)
+        );
+        updateGallery(filteredPokemons);
+    } else if (query.length === 0) {
+        // Zeige alle Pokémon, wenn das Suchfeld leer ist
+        updateGallery(pokemonList);
+    }
+});
+
+// Galerie mit neuen Pokémon aktualisieren
+const updateGallery = (filteredList) => {
+    pokemonGallery.innerHTML = ""; // Alte Einträge entfernen
+    filteredList.forEach((pokemon) => {
+        const types = pokemon.types.map((t) => t.type.name).join(", ");
+        const bgColor = typeColors[pokemon.types[0]?.type.name] || "#D3D3D3";
+        const thumbnailHTML = templates.pokemonThumbnail(
+            pokemon.id,
+            pokemon.name,
+            types,
+            pokemon.sprites.front_default,
+            bgColor
+        );
+        pokemonGallery.insertAdjacentHTML("beforeend", thumbnailHTML);
+    });
+
+    // Wenn das Suchfeld leer ist, reaktiviere den "Lade mehr"-Button
+    if (filteredList.length === 0) {
+        loadMoreButton.disabled = false;
+    }
+};
