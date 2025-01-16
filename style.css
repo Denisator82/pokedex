@@ -277,7 +277,7 @@ h2{
         width: 400px;
         margin: 0;
     }
-        
+    
     .search-wrap > input {
         width: 60%;
     }
@@ -286,7 +286,6 @@ h2{
 
 @media (max-width: 600px) {
     .card {
-        
         width: 250px;
         height: 500px;
     }
@@ -298,7 +297,7 @@ h2{
     
     .pokemon-info-chart {
         height: 200px;
-        margin: 10px 0;
+        margin: 10px 0px;
     }
     
     .card-nav img{
@@ -311,7 +310,7 @@ h2{
     .search-wrap {
         width: 250px;
     }
-        
+    
     .search-wrap > input {
         width: 50%;
     }
